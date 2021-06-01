@@ -1,0 +1,1 @@
+This directory stores images. These may need to be downloaded and processed using the library creator.
