@@ -4,11 +4,34 @@ import random
 import shutil
 import sys
 
-def createDeck():
-  # Get current directory.
-  cur_dir = os.getcwd()
+# Global variable. List representing the deck.
+deck = []
 
-  deck_dir = cur_dir + "/Deck"
+# Get current and deck directories.
+cur_dir = os.getcwd()
+deck_dir = cur_dir + "/Deck"
+interface = open(cur_dir + "/interface.txt", "w+t")
+
+def sortHelper(card):
+  return card["d_path"]
+
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+def toGUI(msg):
+  # Save original stdout.
+  o_stdout = sys.stdout
+
+  # Send message to interface file.
+  sys.stdout = interface
+  print(msg)
+
+  # Point to original stdout.
+  sys.stdout = o_stdout
+
+def createDeck() -> list:
+
+  global deck
 
   try:
     # Remove old deck.
@@ -40,9 +63,7 @@ def createDeck():
 
     # Get original card file path.
     org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
-    
-    print("Num Cards: ", num_cards)
-    print("Original Card Path: ", org_card_path)
+    print("{}: {}".format(num_cards, card_name))
 
     for i in range(num_cards):
       # Get cryptographically random sequence of 16 chars.
@@ -51,29 +72,45 @@ def createDeck():
       # Create path for duplicate card.
       dup_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
       print("Duplicate Card Path: ", dup_card_path)
+      deck.append({"name": card_name, "o_path": org_card_path, "d_path": dup_card_path})
 
-      # Copy file. 
-      # TODO: move copy file functionaliyt to draw card
-      shutil.copyfile(org_card_path, dup_card_path)
+  deck.sort(key = sortHelper)
+
+  return deck
+
+def drawCard():
+  if len(deck) == 0:
+    msg = "Deck is exhausted."
+    print(msg)
+    toGUI(msg)
+    return 
+  else:
+    card = deck.pop(0)
+    shutil.copyfile(card["o_path"], card["d_path"])
+
+def clearDrawPile():
+  global deck_dir
+
+  print("Size of draw pile: ", len(os.listdir(deck_dir))) 
+  if len(os.listdir(deck_dir)) == 0:
+    msg = "Draw pile is empty."
+    print(msg)
+    toGUI(msg)
+    return
+  else:
+    for f in os.listdir(deck_dir):
+      os.remove(os.path.join(deck_dir, f))
+
+# def drawHand():
+#   return None
+
+# def putCardOnTopOfLibrary(str: card_name):
+#   return None
+
+# def shuffleLibrary():
+#   return None
     
-    print()
 
-  
-  # open file for reading
-  # open file for writing
-  # open file with current name
-  # make copy of file
-  # name file with hex string
-  
 
-'''
-# Params: text file
-# Returns: dictionary
-#
-* parse deck list by line -> list
-* parse line -> name, num
-* dict.append("name": num)
-*
-''' 
 
-createDeck()
+
