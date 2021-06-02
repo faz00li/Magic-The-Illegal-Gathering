@@ -5,11 +5,12 @@ import os
 import shutil
 import sys
 
-# Global variables. 
-deck = [] # List representing the deck.
+
+# Global variable. List representing the deck.
+deck = []
 msg_padding = " "
 
-# Get current and deck directories. TODO: put in constructor.
+# Get current and deck directories.
 cur_dir = os.getcwd()
 deck_dir = cur_dir + "/Deck"
 interface = StringIO("Welcome to Magic the Illegal Gathering")
@@ -21,7 +22,7 @@ def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
 def writeInterface(msg):
-  interface.write(msg + msg_padding) 
+  interface.write(msg + msg_padding)
 
 def createDeck():
 
@@ -98,9 +99,7 @@ def clearDrawPile():
 # def shuffleLibrary():
 #   return None
     
-def printDeck():
-  for card in deck:
-    print(card["name"])
+
 
 
 
