@@ -1,20 +1,16 @@
 import deck
 
-mdeck = deck.createDeck()
+deck.createDeck()
 
-for card in mdeck:
-  print(card["name"])
-
-def readFromInterface():
-  global msg
-  deck.interface.seek(0,0)
+def readInterface():
+  deck.interface.seek(0)
   msg = deck.interface.readline()
+  deck.interface.seek(0)
   deck.interface.truncate()
-  deck.interface.seek(0,0)
+  return msg
 
 while True:
-  readFromInterface()
-  print(msg)
+  print(readInterface())
   user_choice = int(
     input("What would you like to do?\n \
       \t1) Draw card\n \
@@ -25,7 +21,6 @@ while True:
   if user_choice == 1:
     deck.drawCard()
     deck.cls()
-    deck.interface.truncate()
     deck.interface.write("You drew a card.")
   
   # Exit.
@@ -37,7 +32,6 @@ while True:
   if user_choice == 3:
     deck.clearDrawPile()
     deck.cls()
-    deck.interface.truncate()
     deck.interface.write("You cleared the draw pile.")
   
 

@@ -5,15 +5,14 @@ import os
 import shutil
 import sys
 
+# Global variables. 
+deck = [] # List representing the deck.
+msg_padding = " "
 
-# Global variable. List representing the deck.
-deck = []
-
-# Get current and deck directories.
+# Get current and deck directories. TODO: put in constructor.
 cur_dir = os.getcwd()
 deck_dir = cur_dir + "/Deck"
-interface = open(cur_dir + "/interface.txt", "w+t")
-interface.write("Welcome to Magic the Illegal Gathering")
+interface = StringIO("Welcome to Magic the Illegal Gathering")
 
 def sortHelper(card):
   return card["d_path"]
@@ -21,12 +20,10 @@ def sortHelper(card):
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
-def toGUI(msg):
-  global msg
-  msg_size = interface.write(msg)
-  interface.seek(interface.tell()/msg)
+def writeInterface(msg):
+  interface.write(msg + msg_padding) 
 
-def createDeck() -> list:
+def createDeck():
 
   global deck
 
@@ -73,11 +70,9 @@ def createDeck() -> list:
 
   deck.sort(key = sortHelper)
 
-  return deck
-
 def drawCard():
   if len(deck) == 0:
-    toGUI("Deck is exhausted.")
+    writeInterface("Deck is exhausted.")
     return 
   else:
     card = deck.pop(0)
@@ -88,7 +83,7 @@ def clearDrawPile():
 
   print("Size of draw pile: ", len(os.listdir(deck_dir))) 
   if len(os.listdir(deck_dir)) == 0:
-    toGUI("Draw pile is empty.")
+    writeInterface("Draw pile is empty.")
     return
   else:
     for f in os.listdir(deck_dir):
@@ -103,7 +98,9 @@ def clearDrawPile():
 # def shuffleLibrary():
 #   return None
     
-
+def printDeck():
+  for card in deck:
+    print(card["name"])
 
 
 

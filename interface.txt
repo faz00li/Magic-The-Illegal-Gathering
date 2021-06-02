@@ -1,2 +1,0 @@
-Draw pile is empty.
-You cleared the draw pile.
