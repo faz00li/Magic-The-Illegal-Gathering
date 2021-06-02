@@ -1,3 +1,0 @@
-https://api.scryfall.com/cards/search?q=e%3Aleb
-
-https://c1.scryfall.com/file/scryfall-cards/small/front/6/9/69c3b2a3-0daa-4d42-832d-fcdfda6555ea.jpg?1559591522'

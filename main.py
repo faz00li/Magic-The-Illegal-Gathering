@@ -1,7 +1,5 @@
 import deck
 
-msg = "Welcome to Magic the Illegal Gathering"
-
 mdeck = deck.createDeck()
 
 for card in mdeck:
@@ -16,7 +14,7 @@ def readFromInterface():
 
 while True:
   readFromInterface()
-  print("Message: ", msg)
+  print(msg)
   user_choice = int(
     input("What would you like to do?\n \
       \t1) Draw card\n \
@@ -27,6 +25,8 @@ while True:
   if user_choice == 1:
     deck.drawCard()
     deck.cls()
+    deck.interface.truncate()
+    deck.interface.write("You drew a card.")
   
   # Exit.
   if user_choice == 2:
@@ -37,5 +37,7 @@ while True:
   if user_choice == 3:
     deck.clearDrawPile()
     deck.cls()
+    deck.interface.truncate()
+    deck.interface.write("You cleared the draw pile.")
   
 

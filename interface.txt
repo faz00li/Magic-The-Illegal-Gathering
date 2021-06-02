@@ -1,2 +1,2 @@
-Deck is exhausted.
-
+Draw pile is empty.
+You cleared the draw pile.

@@ -1,8 +1,10 @@
+from io import StringIO
+
 import binascii
 import os
-import random
 import shutil
 import sys
+
 
 # Global variable. List representing the deck.
 deck = []
@@ -11,6 +13,7 @@ deck = []
 cur_dir = os.getcwd()
 deck_dir = cur_dir + "/Deck"
 interface = open(cur_dir + "/interface.txt", "w+t")
+interface.write("Welcome to Magic the Illegal Gathering")
 
 def sortHelper(card):
   return card["d_path"]
@@ -19,15 +22,9 @@ def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
 def toGUI(msg):
-  # Save original stdout.
-  o_stdout = sys.stdout
-
-  # Send message to interface file.
-  sys.stdout = interface
-  print(msg)
-
-  # Point to original stdout.
-  sys.stdout = o_stdout
+  global msg
+  msg_size = interface.write(msg)
+  interface.seek(interface.tell()/msg)
 
 def createDeck() -> list:
 
@@ -80,9 +77,7 @@ def createDeck() -> list:
 
 def drawCard():
   if len(deck) == 0:
-    msg = "Deck is exhausted."
-    print(msg)
-    toGUI(msg)
+    toGUI("Deck is exhausted.")
     return 
   else:
     card = deck.pop(0)
@@ -93,9 +88,7 @@ def clearDrawPile():
 
   print("Size of draw pile: ", len(os.listdir(deck_dir))) 
   if len(os.listdir(deck_dir)) == 0:
-    msg = "Draw pile is empty."
-    print(msg)
-    toGUI(msg)
+    toGUI("Draw pile is empty.")
     return
   else:
     for f in os.listdir(deck_dir):
