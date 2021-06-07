@@ -5,6 +5,8 @@ import os
 import shutil
 import sys
 
+from diagnostic import CREATE_DECK_DIAG
+
 
 # Global variable. List representing the deck.
 deck = []
@@ -42,7 +44,8 @@ def createDeck():
   deck_name = deck_file_name.capitalize().rstrip(".txt")
   deck_path = cur_dir + "/Deck Lists/" + deck_file_name
 
-  print("Creating deck named {}\nFrom file: {} \n".format(deck_name, deck_path))
+  if CREATE_DECK_DIAG:
+    print("Creating deck named {}\nFrom file: {} \n".format(deck_name, deck_path)) 
 
   f = open(deck_path, "rt")
   card_list = f.readlines()
@@ -58,7 +61,9 @@ def createDeck():
 
     # Get original card file path.
     org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
-    print("{}: {}".format(num_cards, card_name))
+
+    if CREATE_DECK_DIAG:
+      print("{}: {}".format(num_cards, card_name))
 
     for i in range(num_cards):
       # Get cryptographically random sequence of 16 chars.
@@ -66,7 +71,10 @@ def createDeck():
 
       # Create path for duplicate card.
       dup_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
-      print("Duplicate Card Path: ", dup_card_path)
+      
+      if CREATE_DECK_DIAG:
+        print("Duplicate Card Path: ", dup_card_path)
+
       deck.append({"name": card_name, "o_path": org_card_path, "d_path": dup_card_path})
 
   deck.sort(key = sortHelper)
