@@ -10,7 +10,7 @@ from diagnostic import CREATE_DECK_DIAG
 # Global variable. List representing the deck.
 deck = []
 deck_size = 0
-msg_padding = " "
+msg_padding = "\n"
 
 # Get current and deck directories.
 cur_dir = os.getcwd()
@@ -21,6 +21,15 @@ interface = StringIO("Welcome to Magic the Illegal Gathering")
 
 def sortHelper(card):
   return card["d_path"]
+
+def isEmpty():
+  deck_empty = False
+
+  if deck_size == 0:
+    deck_empty = True 
+    writeInterface("Deck is exhausted.")
+  
+  return deck_empty
 
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -109,15 +118,14 @@ def printDeck():
     print("Deck:    ", card["d_path"])
     print("Hand:    ", card["h_path"], end = '\n\n')
 
-def drawCard():
+def drawCard() -> bool:
   global deck
   global deck_size
 
   # Check for empty deck.
-  if deck_size == 0:
-    writeInterface("Deck is exhausted.")
-    return 
-
+  if isEmpty():
+    return False
+    
   # Remove card from list.
   card = deck.pop(0)
 
@@ -133,6 +141,8 @@ def drawCard():
 
   writeInterface("You drew: " + card["name"])
 
+  return True
+
 def clearHand():
   global hand_dir
 
@@ -144,8 +154,15 @@ def clearHand():
     for f in os.listdir(hand_dir):
       os.remove(os.path.join(hand_dir, f))
 
-# def drawHand():
-#   return None
+def drawHand():
+  print("////////// DRAWING HAND //////////")
+  for i in range(6):
+    drawn = drawCard()
+    if drawn == False:
+      break
+      
+  writeInterface("{} cards drawn.".format(i))
+  
 
 # def putCardOnTopOfLibrary(str: card_name):
 #   return None
