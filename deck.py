@@ -10,6 +10,7 @@ from diagnostic import CREATE_DECK_DIAG
 
 # Global variable. List representing the deck.
 deck = []
+deck_size = 0
 msg_padding = " "
 
 # Get current and deck directories.
@@ -29,6 +30,7 @@ def writeInterface(msg):
 def createDeck():
 
   global deck
+  global deck_size
 
   try:
     # Remove old deck.
@@ -76,8 +78,27 @@ def createDeck():
         print("Duplicate Card Path: ", dup_card_path)
 
       deck.append({"name": card_name, "o_path": org_card_path, "d_path": dup_card_path})
+      deck_size = deck_size + 1
 
   deck.sort(key = sortHelper)
+
+def printDeck():
+  global deck
+  global deck_size
+
+  print("\n////////// PRINTING DECK //////////")
+  
+  if deck_size == 0:
+    print("Deck is empty")
+    return
+
+  print("Cards in deck: ", deck_size, end = "\n\n")
+
+  for card in deck:
+    print("Card:    ", card["name"])
+    print("Library: ", card["o_path"])
+    print("Deck:    ", card["d_path"], end = '\n\n')
+
 
 def drawCard():
   if len(deck) == 0:
