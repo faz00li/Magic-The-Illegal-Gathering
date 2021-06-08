@@ -89,23 +89,58 @@ def createDeck():
 
   deck.sort(key = sortHelper)
 
-def printDeck():
+def printDeck(debug = False):
   global deck
   global deck_size
 
   print("\n////////// PRINTING DECK //////////")
   
   if deck_size == 0:
-    print("Deck is empty")
+    print("Deck: empty")
+    print("///////////////////////////////////", end = "\n\n")
     return
 
-  print("Cards in deck: ", deck_size, end = "\n\n")
+  print("Cards: ", deck_size, )
+  print("///////////////////////////////////", end = "\n\n")
 
   for card in deck:
-    print("Card:    ", card["name"])
-    print("Library: ", card["o_path"])
-    print("Deck:    ", card["d_path"])
-    print("Hand:    ", card["h_path"], end = '\n\n')
+    print("Card: ", card["name"])
+
+    if debug == True:
+      print("Card:    ", card["name"])
+      print("Library: ", card["o_path"])
+      print("Deck:    ", card["d_path"])
+      print("Hand:    ", card["h_path"], end = '\n\n')
+  
+  print()
+
+def dumpCard():
+  global deck
+  global deck_size
+
+  # Check for empty deck.
+  if isEmpty():
+    interface.write("Deck is exhausted.")
+    return
+
+  # Remove card from list.
+  card = deck.pop(0)
+
+  # Copy file to Hand directory.
+  try:
+    shutil.copyfile(card["o_path"], card["d_path"])
+  except Exception as e:
+    print(e)
+    # TODO possible additional mitigation steps needed.
+
+  # Decrement deck size by 1.
+  deck_size = deck_size - 1
+
+  interface.write("Dumped: " + card["name"])
+
+def dumpDeck():
+  while deck_size > 0:
+    dumpCard()
 
 def drawCard() -> bool:
   global deck
