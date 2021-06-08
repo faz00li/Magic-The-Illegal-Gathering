@@ -1,19 +1,15 @@
 import deck
-
-def readInterface():
-  deck.interface.seek(0)
-  msg = deck.interface.readlines()
-  deck.interface.seek(0)
-  deck.interface.truncate()
-  return msg
+import interface
 
 deck.createDeck()
 deck.printDeck()
 
 while True:
-  messages = readInterface()
+  messages = interface.read()
+
   for message in messages:
-    print(message)
+    print(message, end = "")
+  print()
 
   user_choice = int(
     input("What would you like to do?\n \
@@ -24,27 +20,27 @@ while True:
 
   # Draw card.
   if user_choice == 1:
-    deck.interface.write("Drawing a card:")
+    interface.write("Drawing a card:")
     deck.drawCard()
-    deck.cls()
+    interface.cls()
   
   # Exit.
   if user_choice == 2:
     # TODO: close all open files.
-    deck.printDeck()
+    interface.interface.close()
     exit(0)
 
   # Clear draw pile.  
   if user_choice == 3:
-    deck.interface.write("You cleared your hand.")
+    interface.write("You cleared your hand.")
     deck.clearHand()
-    deck.cls()
+    interface.cls()
 
   # Draw hand.
   if user_choice == 4:
-    deck.interface.write("Drawing hand:")
+    interface.write("Drawing hand:")
     deck.drawHand()
-    deck.cls()
+    interface.cls()
 
 
 

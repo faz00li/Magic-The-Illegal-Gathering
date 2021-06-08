@@ -1,23 +1,19 @@
-from io import StringIO
-
 import binascii
 import os
 import shutil
 import sys
 
 from diagnostic import CREATE_DECK_DIAG
+import interface
 
 # Global variable. List representing the deck.
 deck = []
 deck_size = 0
-msg_padding = "\n"
 
 # Get current and deck directories.
 cur_dir = os.getcwd()
 deck_dir = cur_dir + "/Deck"
 hand_dir = cur_dir + "/Hand"
-
-interface = StringIO("Welcome to Magic the Illegal Gathering")
 
 def sortHelper(card):
   return card["d_path"]
@@ -27,15 +23,8 @@ def isEmpty():
 
   if deck_size == 0:
     deck_empty = True 
-    writeInterface("Deck is exhausted.")
   
   return deck_empty
-
-def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
-
-def writeInterface(msg):
-  interface.write(msg + msg_padding)
 
 def createDeck():
 
@@ -124,6 +113,7 @@ def drawCard() -> bool:
 
   # Check for empty deck.
   if isEmpty():
+    interface.write("Deck is exhausted.")
     return False
     
   # Remove card from list.
@@ -139,7 +129,7 @@ def drawCard() -> bool:
   # Decrement deck size by 1.
   deck_size = deck_size - 1
 
-  writeInterface("You drew: " + card["name"])
+  interface.write("You drew: " + card["name"])
 
   return True
 
@@ -148,7 +138,7 @@ def clearHand():
 
   print("Size of draw pile: ", len(os.listdir(hand_dir))) 
   if len(os.listdir(hand_dir)) == 0:
-    writeInterface("Draw pile is empty.")
+    interface.write("Draw pile is empty.")
     return
   else:
     for f in os.listdir(hand_dir):
@@ -161,7 +151,7 @@ def drawHand():
     if drawn == False:
       break
       
-  writeInterface("{} cards drawn.".format(i))
+  interface.write("{} cards drawn.".format(i))
   
 
 # def putCardOnTopOfLibrary(str: card_name):
