@@ -7,7 +7,6 @@ import sys
 
 from diagnostic import CREATE_DECK_DIAG
 
-
 # Global variable. List representing the deck.
 deck = []
 deck_size = 0
@@ -16,6 +15,8 @@ msg_padding = " "
 # Get current and deck directories.
 cur_dir = os.getcwd()
 deck_dir = cur_dir + "/Deck"
+hand_dir = cur_dir + "/Hand"
+
 interface = StringIO("Welcome to Magic the Illegal Gathering")
 
 def sortHelper(card):
@@ -32,14 +33,21 @@ def createDeck():
   global deck
   global deck_size
 
+  # Remove old deck.
   try:
-    # Remove old deck.
     shutil.rmtree(deck_dir)
   except Exception as e:
     print(e)
   
+  # Remove old hand.
+  try:
+    shutil.rmtree(hand_dir)
+  except Exception as e:
+    print(e)
+
   # Create new deck directory.
   os.mkdir(deck_dir)
+  os.mkdir(hand_dir)
 
   # Get path to new deck list.
   deck_file_name = sys.argv[1]
@@ -72,12 +80,13 @@ def createDeck():
       rand_name = binascii.hexlify(os.urandom(16)).decode()
 
       # Create path for duplicate card.
-      dup_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
-      
-      if CREATE_DECK_DIAG:
-        print("Duplicate Card Path: ", dup_card_path)
+      deck_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
+      hand_card_path = cur_dir + "/Hand/" + rand_name + ".jpeg"
 
-      deck.append({"name": card_name, "o_path": org_card_path, "d_path": dup_card_path})
+      if CREATE_DECK_DIAG:
+        print("Duplicate Card Path: ", deck_card_path)
+
+      deck.append({"name": card_name, "o_path": org_card_path, "d_path": deck_card_path, "h_path": hand_card_path})
       deck_size = deck_size + 1
 
   deck.sort(key = sortHelper)
@@ -97,8 +106,8 @@ def printDeck():
   for card in deck:
     print("Card:    ", card["name"])
     print("Library: ", card["o_path"])
-    print("Deck:    ", card["d_path"], end = '\n\n')
-
+    print("Deck:    ", card["d_path"])
+    print("Hand:    ", card["h_path"], end = '\n\n')
 
 def drawCard():
   if len(deck) == 0:
