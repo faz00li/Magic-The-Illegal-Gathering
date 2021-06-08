@@ -9,6 +9,7 @@ def endGame():
 
 deck.createDeck()
 deck.printDeck()
+deck.printUniqueCards()
 
 while True:
   messages = interface.read()
@@ -52,12 +53,12 @@ while True:
     deck.drawHand()
     interface.cls()
 
-# Print Deck.
+  # Print Deck.
   if user_choice == 5:
     interface.cls()
     deck.printDeck()
 
-# Dump Deck.
+  # Dump Deck.
   if user_choice == 6:
     interface.write("Dumping deck:\n")
     deck.dumpDeck()

@@ -9,15 +9,18 @@ import interface
 # Global variable. List representing the deck.
 deck = []
 deck_size = 0
-unique_card_names = []
+unique_cards = []
 
 # Get current and deck directories.
 cur_dir = os.getcwd()
 deck_dir = cur_dir + "/Deck"
 hand_dir = cur_dir + "/Hand"
 
-def sortHelper(card):
+def sortHelperPath(card):
   return card["d_path"]
+
+def sortHelperName(card):
+  return card["name"]
 
 def isEmpty():
   deck_empty = False
@@ -69,7 +72,7 @@ def createDeck():
     num_cards = int(name_num[1]) 
 
     # Add unique card name to list.
-    unique_card_names.append(card_name)
+    unique_cards.append({"name": card_name, "count": num_cards})
 
     # Get original card file path.
     org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
@@ -91,7 +94,8 @@ def createDeck():
       deck.append({"name": card_name, "o_path": org_card_path, "d_path": deck_card_path, "h_path": hand_card_path})
       deck_size = deck_size + 1
 
-  deck.sort(key = sortHelper)
+  deck.sort(key = sortHelperPath)
+  unique_cards.sort(key = sortHelperName)
 
 def printDeck(debug = False):
   global deck
@@ -117,6 +121,24 @@ def printDeck(debug = False):
       print("Hand:    ", card["h_path"], end = '\n\n')
   
   print()
+
+def printUniqueCards(debug = False):
+  
+  print("\n////// PRINTING UNIQUE CARDS //////")
+  if deck_size == 0:
+    print("Deck: empty")
+    print("///////////////////////////////////", end = "\n\n")
+    return
+
+  print("Cards: ", deck_size)
+  print("///////////////////////////////////", end = "\n\n")
+
+  for card in unique_cards:
+    print(card["count"], ": ", card["name"], )
+  
+  print()
+
+
 
 def dumpCard():
   global deck
@@ -199,7 +221,7 @@ def putCardOnTopOfLibrary() -> bool:
   card_name = input("Enter name of card to put on top of library: ")
 
   # TODO: update check to include number of card as well.
-  if unique_card_names.count(card_name) == 0:
+  if unique_cards.count(card_name) == 0:
     interface.write("No such card was present in original deck. Double check spelling and try again.")
     return False
   
