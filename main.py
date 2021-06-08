@@ -2,6 +2,7 @@ import deck
 import interface
 
 end_game = False
+
 def endGame():
   interface.interface.close()
   exit(0)

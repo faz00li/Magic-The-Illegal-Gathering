@@ -9,6 +9,7 @@ import interface
 # Global variable. List representing the deck.
 deck = []
 deck_size = 0
+unique_card_names = []
 
 # Get current and deck directories.
 cur_dir = os.getcwd()
@@ -66,6 +67,9 @@ def createDeck():
     name_num = line.split(":") 
     card_name = name_num[0]
     num_cards = int(name_num[1]) 
+
+    # Add unique card name to list.
+    unique_card_names.append(card_name)
 
     # Get original card file path.
     org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
@@ -188,9 +192,26 @@ def drawHand():
       
   interface.write("{} cards drawn.".format(i))
   
+def putCardOnTopOfLibrary() -> bool:
+  global deck
+  global deck_size
 
-# def putCardOnTopOfLibrary(str: card_name):
-#   return None
+  card_name = input("Enter name of card to put on top of library: ")
+
+  # TODO: update check to include number of card as well.
+  if unique_card_names.count(card_name) == 0:
+    interface.write("No such card was present in original deck. Double check spelling and try again.")
+    return False
+  
+  rand_name = binascii.hexlify(os.urandom(16)).decode()
+  org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
+  deck_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
+  hand_card_path = cur_dir + "/Hand/" + rand_name + ".jpeg"
+
+  deck.insert(1, {"name": card_name, "o_path": org_card_path, "d_path": deck_card_path, "h_path": hand_card_path})
+  
+  deck_size = deck_size + 1
+
 
 # def shuffleLibrary():
 #   return None
