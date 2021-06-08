@@ -110,12 +110,28 @@ def printDeck():
     print("Hand:    ", card["h_path"], end = '\n\n')
 
 def drawCard():
-  if len(deck) == 0:
+  global deck
+  global deck_size
+
+  # Check for empty deck.
+  if deck_size == 0:
     writeInterface("Deck is exhausted.")
     return 
-  else:
-    card = deck.pop(0)
-    shutil.copyfile(card["o_path"], card["d_path"])
+
+  # Remove card from list.
+  card = deck.pop(0)
+
+  # Copy file to Hand directory.
+  try:
+    shutil.copyfile(card["o_path"], card["h_path"])
+  except Exception as e:
+    print(e)
+    # TODO possible additional mitigation steps needed.
+
+  # Decrement deck size by 1.
+  deck_size = deck_size - 1
+
+  writeInterface("You drew: " + card["name"])
 
 def clearDrawPile():
   global deck_dir
