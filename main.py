@@ -29,6 +29,7 @@ while True:
       \t4) Draw Hand\n \
       \t5) Print Deck\n \
       \t6) Dump Deck and Exit\n \
+      \t7) Print Unique Cards\n \
       \n\n")) 
 
   # Draw card.
@@ -64,6 +65,13 @@ while True:
     deck.dumpDeck()
     interface.cls()
     end_game = True
+
+  # Print unique cards.
+  if user_choice == 7:
+    interface.cls()
+    deck.printUniqueCards()
+    
+
 
 
 

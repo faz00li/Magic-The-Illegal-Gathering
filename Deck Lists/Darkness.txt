@@ -1,4 +1,4 @@
-Demonic Tutor:1
+Demonic Tutor:15
 Drain Life:1
 Mind Twist:1
 Sinkhole:1

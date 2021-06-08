@@ -9,7 +9,7 @@ import interface
 # Global variable. List representing the deck.
 deck = []
 deck_size = 0
-unique_cards = []
+unique_cards = {}
 
 # Get current and deck directories.
 cur_dir = os.getcwd()
@@ -62,7 +62,7 @@ def createDeck():
   f = open(deck_path, "rt")
   card_list = f.readlines()
   f.close()
-
+  
   # Iterate through deck list.
   for line in card_list:
     # Get card name and number of instances in deck.
@@ -72,7 +72,7 @@ def createDeck():
     num_cards = int(name_num[1]) 
 
     # Add unique card name to list.
-    unique_cards.append({"name": card_name, "count": num_cards})
+    unique_cards.update({card_name: {"max": num_cards, "count": num_cards}})
 
     # Get original card file path.
     org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
@@ -95,7 +95,7 @@ def createDeck():
       deck_size = deck_size + 1
 
   deck.sort(key = sortHelperPath)
-  unique_cards.sort(key = sortHelperName)
+  # unique_cards.sort(key = sortHelperName)
 
 def printDeck(debug = False):
   global deck
@@ -122,7 +122,7 @@ def printDeck(debug = False):
   
   print()
 
-def printUniqueCards(debug = False):
+def printUniqueCards():
   
   print("\n////// PRINTING UNIQUE CARDS //////")
   if deck_size == 0:
@@ -133,12 +133,13 @@ def printUniqueCards(debug = False):
   print("Cards: ", deck_size)
   print("///////////////////////////////////", end = "\n\n")
 
-  for card in unique_cards:
-    print(card["count"], ": ", card["name"], )
+  # print(unique_cards)
+
+  for key, value in unique_cards.items():
+    print("{}/{}: {}".format(value["max"], value["count"], key))
+  
   
   print()
-
-
 
 def dumpCard():
   global deck
@@ -189,6 +190,7 @@ def drawCard() -> bool:
 
   # Decrement deck size by 1.
   deck_size = deck_size - 1
+  unique_cards
 
   interface.write("You drew: " + card["name"])
 
@@ -207,12 +209,12 @@ def clearHand():
 
 def drawHand():
   print("////////// DRAWING HAND //////////")
-  for i in range(6):
+  for i in range(7):
     drawn = drawCard()
     if drawn == False:
       break
       
-  interface.write("{} cards drawn.".format(i))
+  interface.write("{} cards drawn.".format(i + 1))
   
 def putCardOnTopOfLibrary() -> bool:
   global deck
