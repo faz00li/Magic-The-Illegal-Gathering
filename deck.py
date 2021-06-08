@@ -133,16 +133,16 @@ def drawCard():
 
   writeInterface("You drew: " + card["name"])
 
-def clearDrawPile():
-  global deck_dir
+def clearHand():
+  global hand_dir
 
-  print("Size of draw pile: ", len(os.listdir(deck_dir))) 
-  if len(os.listdir(deck_dir)) == 0:
+  print("Size of draw pile: ", len(os.listdir(hand_dir))) 
+  if len(os.listdir(hand_dir)) == 0:
     writeInterface("Draw pile is empty.")
     return
   else:
-    for f in os.listdir(deck_dir):
-      os.remove(os.path.join(deck_dir, f))
+    for f in os.listdir(hand_dir):
+      os.remove(os.path.join(hand_dir, f))
 
 # def drawHand():
 #   return None

@@ -18,7 +18,7 @@ while True:
     input("What would you like to do?\n \
       \t1) Draw card\n \
       \t2) Exit\n \
-      \t3) Clear Draw Pile\n\n")) 
+      \t3) Clear Hand\n\n")) 
 
   # Draw card.
   if user_choice == 1:
@@ -32,8 +32,8 @@ while True:
 
   # Clear draw pile.  
   if user_choice == 3:
-    deck.clearDrawPile()
+    deck.clearHand()
     deck.cls()
-    deck.interface.write("You cleared the draw pile.")
+    deck.interface.write("You cleared your hand.")
   
 
