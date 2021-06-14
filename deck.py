@@ -124,20 +124,12 @@ def printDeck(debug = False):
 
 def printUniqueCards():
   
-  print("\n////// PRINTING UNIQUE CARDS //////")
-  if deck_size == 0:
-    print("Deck: empty")
-    print("///////////////////////////////////", end = "\n\n")
-    return
-
-  print("Cards: ", deck_size)
-  print("///////////////////////////////////", end = "\n\n")
-
+  print("\n////// PRINTING UNIQUE CARDS //////\n")
+  
   # print(unique_cards)
 
   for key, value in unique_cards.items():
-    print("{}/{}: {}".format(value["max"], value["count"], key))
-  
+    print("{}/{}: {}".format(value["count"], value["max"], key))
   
   print()
 
@@ -190,7 +182,10 @@ def drawCard() -> bool:
 
   # Decrement deck size by 1.
   deck_size = deck_size - 1
-  unique_cards
+  print(unique_cards[card["name"]])
+  card_to_update = unique_cards[card["name"]]
+  card_to_update["count"] = card_to_update["count"] - 1
+  # os.sleep(1)
 
   interface.write("You drew: " + card["name"])
 
@@ -222,11 +217,21 @@ def putCardOnTopOfLibrary() -> bool:
 
   card_name = input("Enter name of card to put on top of library: ")
 
+  print(card_name)
+
   # TODO: update check to include number of card as well.
-  if unique_cards.count(card_name) == 0:
+  if not card_name in unique_cards:
+    print("Here")
     interface.write("No such card was present in original deck. Double check spelling and try again.")
     return False
   
+  card = unique_cards[card_name]
+  if card["count"] >= card["max"]:
+    interface.write("Putting this card on top of the library exceeds the original number of cards in the deck. Choose other action.")
+    return False
+  
+  card["count"] = card["count"] + 1
+
   rand_name = binascii.hexlify(os.urandom(16)).decode()
   org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
   deck_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
@@ -236,6 +241,7 @@ def putCardOnTopOfLibrary() -> bool:
   
   deck_size = deck_size + 1
 
+  interface.write("{} put back.".format(card_name))
 
 # def shuffleLibrary():
 #   return None

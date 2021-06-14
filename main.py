@@ -21,16 +21,22 @@ while True:
   if end_game == True:
     endGame()
 
-  user_choice = int(
-    input("What would you like to do?\n \
-      \t1) Draw card\n \
-      \t2) Exit\n \
-      \t3) Clear Hand\n \
-      \t4) Draw Hand\n \
-      \t5) Print Deck\n \
-      \t6) Dump Deck and Exit\n \
-      \t7) Print Unique Cards\n \
-      \n\n")) 
+  try:
+    user_choice = int(
+      input("What would you like to do?\n \
+        \t1) Draw card\n \
+        \t2) Exit\n \
+        \t3) Clear Hand\n \
+        \t4) Draw Hand\n \
+        \t5) Print Deck\n \
+        \t6) Dump Deck and Exit\n \
+        \t7) Print Unique Cards\n \
+        \t8) Put card on top of library\n \
+        \n\n")) 
+  except Exception as e:
+    print(e)
+    interface.cls()
+    continue
 
   # Draw card.
   if user_choice == 1:
@@ -70,7 +76,13 @@ while True:
   if user_choice == 7:
     interface.cls()
     deck.printUniqueCards()
-    
+
+  # Print unique cards.
+  if user_choice == 8:
+    interface.write("Putting card on top of library:")
+    deck.putCardOnTopOfLibrary()
+    interface.cls()
+  
 
 
 
