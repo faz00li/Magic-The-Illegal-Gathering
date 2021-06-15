@@ -2,6 +2,7 @@ import binascii
 import os
 import shutil
 import sys
+import time
 
 from diagnostic import CREATE_DECK_DIAG
 import interface
@@ -13,8 +14,23 @@ unique_cards = {}
 
 # Get current and deck directories.
 cur_dir = os.getcwd()
-deck_dir = cur_dir + "/Deck"
-hand_dir = cur_dir + "/Hand"
+
+print(os.name)
+if os.name == 'nt':
+  print("WINDOWS*****************************************")
+  os_deck_path = "\\Deck\\"
+  os_hand_path = "\\Hand\\"
+  os_lib_path = "\\Library\\"
+  os_lists_path = "\\Lists\\"
+else:
+  print("LINUX*****************************************")
+  os_deck_path = "/Deck/"
+  os_hand_path = "/Hand/"
+  os_lib_path = "/Library/"
+  os_lists_path = "/Lists/"
+
+deck_dir = cur_dir + os_deck_path
+hand_dir = cur_dir + os_hand_path
 
 def sortHelperPath(card):
   return card["d_path"]
@@ -34,6 +50,8 @@ def createDeck():
 
   global deck
   global deck_size
+  
+  # TODO: make sure library is downloaded
 
   # Remove old deck.
   try:
@@ -50,11 +68,14 @@ def createDeck():
   # Create new deck directory.
   os.mkdir(deck_dir)
   os.mkdir(hand_dir)
+  # TODO: put in try/exception
 
   # Get path to new deck list.
   deck_file_name = sys.argv[1]
   deck_name = deck_file_name.capitalize().rstrip(".txt")
-  deck_path = cur_dir + "/Deck Lists/" + deck_file_name
+  # TODO: disclaimer about how to name the file: deck_name.txt???
+
+  deck_path = cur_dir + os_lists_path + deck_file_name
 
   if CREATE_DECK_DIAG:
     print("Creating deck named {}\nFrom file: {} \n".format(deck_name, deck_path)) 
@@ -75,7 +96,13 @@ def createDeck():
     unique_cards.update({card_name: {"max": num_cards, "count": num_cards}})
 
     # Get original card file path.
-    org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
+
+    org_card_path = cur_dir + os_lib_path + card_name + ".jpeg"
+
+    # TODO: uncomment for check  
+    # if not os.path.isfile(org_card_path):
+    #   print("A card by the name: ***{}*** does not exist in the library. Double check the spelling or fullname of the card. Make sure library of cards has been downloaded".format(card_name))
+    #   exit(0)
 
     if CREATE_DECK_DIAG:
       print("{}: {}".format(num_cards, card_name))
@@ -85,8 +112,8 @@ def createDeck():
       rand_name = binascii.hexlify(os.urandom(16)).decode()
 
       # Create path for duplicate card.
-      deck_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
-      hand_card_path = cur_dir + "/Hand/" + rand_name + ".jpeg"
+      deck_card_path = cur_dir + os_deck_path + rand_name + ".jpeg"
+      hand_card_path = cur_dir + os_hand_path + rand_name + ".jpeg"
 
       if CREATE_DECK_DIAG:
         print("Duplicate Card Path: ", deck_card_path)
@@ -178,6 +205,8 @@ def drawCard() -> bool:
     shutil.copyfile(card["o_path"], card["h_path"])
   except Exception as e:
     print(e)
+    time.sleep(10)
+    interface.write("EXCEPTION" + e)
     # TODO possible additional mitigation steps needed.
 
   # Decrement deck size by 1.
@@ -233,9 +262,9 @@ def putCardOnTopOfLibrary() -> bool:
   card["count"] = card["count"] + 1
 
   rand_name = binascii.hexlify(os.urandom(16)).decode()
-  org_card_path = cur_dir + "/Library/" + card_name + ".jpeg"
-  deck_card_path = cur_dir + "/Deck/" + rand_name + ".jpeg"
-  hand_card_path = cur_dir + "/Hand/" + rand_name + ".jpeg"
+  org_card_path = cur_dir + os_lib_path + card_name + ".jpeg"
+  deck_card_path = cur_dir + os_deck_path + rand_name + ".jpeg"
+  hand_card_path = cur_dir + os_hand_path + rand_name + ".jpeg"
 
   deck.insert(1, {"name": card_name, "o_path": org_card_path, "d_path": deck_card_path, "h_path": hand_card_path})
   

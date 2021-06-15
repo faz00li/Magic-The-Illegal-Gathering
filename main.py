@@ -8,7 +8,7 @@ def endGame():
   exit(0)
 
 deck.createDeck()
-deck.printDeck()
+deck.printDeck(True)
 deck.printUniqueCards()
 
 while True:
@@ -63,7 +63,7 @@ while True:
   # Print Deck.
   if user_choice == 5:
     interface.cls()
-    deck.printDeck()
+    deck.printDeck(True)
 
   # Dump Deck.
   if user_choice == 6:
